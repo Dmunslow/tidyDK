@@ -1,6 +1,6 @@
-packrat
+packrat/
 data
-EXCLUDESCRIPTS
+EXCLUDESCRIPTS/
 .Rproj
 
 # History files
