@@ -1,8 +1,0 @@
-^EXLUDESCRIPTS$
-^packrat$
-^\.gitignore$
-^\.git$
-^\.Rprofile$
-^.*\.Rproj$
-^\.Rproj\.user$
-^packrat/
