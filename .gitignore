@@ -2,6 +2,8 @@ packrat/
 data
 EXCLUDESCRIPTS/
 .Rproj
+.Rprofile
+.Rbuildignore
 
 # History files
 .Rhistory
