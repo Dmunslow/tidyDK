@@ -7,8 +7,9 @@
 combine_salary_own <- function(sal_clean, own_clean){
 
   ## note: this function combines salary and ownership data. Where possible, it
-  ##        imputes the position for players in the ownership data with FLEX, in order to join data
-  ##
+  ##       imputes the position for players in the ownership data with FLEX.  This may
+  ##       not be possible when player names are duplicated in the salary file
+  ##       AND both players are utilized in at least 1 lineup in the contest
 
   NON_FLEX_POSITIONS <- c('QB', 'P', 'G')
 
