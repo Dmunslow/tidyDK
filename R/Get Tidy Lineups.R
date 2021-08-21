@@ -90,7 +90,7 @@ get_tidy_lineups <- function(contest_path, salary_path, sport, contest_id = NULL
     
     lineups_long
 
-    return(lineups_long[order(lineup_rank, lineup_entry_id)])
+    return(lineups_long[order(lineup_rank, lineup_entry_id, lu_pos_rank_order)])
 
   } else {
 
@@ -246,7 +246,7 @@ get_tidy_lineups <- function(contest_path, salary_path, sport, contest_id = NULL
 
     setcolorder(lineup_long_sub, colorder)
 
-    return(lineup_long_sub[order(lineup_rank, lineup_entry_id)])
+    return(lineup_long_sub[order(lineup_rank, lineup_entry_id, lu_pos_rank_order)])
 
   } ## end dupe check if-else
 
