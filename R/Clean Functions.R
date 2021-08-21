@@ -25,13 +25,13 @@ clean_lineup_data <- function(contest_data, sport){
 
 
   ## create data.table version of data
-  if(!is.data.table(lineup_dat)){
+  if(!is.data.table(contest_data)){
 
-    lineup_clean = as.data.table(lineup_dat)
+    lineup_clean = as.data.table(contest_data)
 
   } else {
 
-    lineup_clean = copy(lineup_dat)
+    lineup_clean = copy(contest_data)
 
   }
 
@@ -68,23 +68,20 @@ clean_lineup_data <- function(contest_data, sport){
   lineups_long[, `:=`(lineup_position = gsub("(^[^ ]+).*", "\\1", value),
                       value = trimws(gsub("^[^ ]+(.*)", "\\1", value)),
                       Points = round(Points,2),
-                      EntryName = gsub("(^[^ ]+).*", "\\1", EntryName))]
-
+                      EntryName = gsub("(^[^ ]+).*", "\\1", EntryName),
+                      lu_pos_rank_order = as.integer(gsub('player_', '', variable)))]
 
   ## drop uneeded column, rename variables
   drop <- c('variable')
   cnames <- c('lineup_rank', 'lineup_entry_id', 'lineup_username', 'lineup_pmr',
-              'lineup_fpts', 'lineup_string', 'player_name', 'player_lineup_position')
-
+              'lineup_fpts', 'lineup_string', 'player_name', 'player_lineup_position', 'lu_pos_rank_order')
   lineups_long <- lineups_long[,-..drop]
-
   setnames(lineups_long, cnames)
 
   ## add n_entries
   lineups_long[, n_entries_contest := uniqueN(lineups_long$lineup_entry_id)]
 
   return(lineups_long)
-
 
 }
 

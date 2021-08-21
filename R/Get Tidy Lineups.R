@@ -29,9 +29,9 @@
 get_tidy_lineups <- function(contest_path, salary_path, sport, contest_id = NULL){
 
   lineups <- fread(contest_path, select = c(1:6), fill = T, sep = ',',
-                   encoding = "UTF-8")
+                   encoding = "UTF-8", integer64 = "character") ## char for int64 to avoid dependency
   contest_info <- fread(contest_path, select = c(8:11),fill = T, sep = ',',
-                        encoding = "UTF-8") ## encoding for accents and garbo
+                        encoding = "UTF-8", integer64 = "character") ## encoding for accents and garbo
   contest_info <- contest_info[!is.na(contest_info$FPTS),]
   salary <- fread(salary_path)
 
@@ -87,8 +87,10 @@ get_tidy_lineups <- function(contest_path, salary_path, sport, contest_id = NULL
                   "player_own_pct", "player_salary", "player_team", "opp_team")
 
     setcolorder(lineups_long, colorder)
+    
+    lineups_long
 
-    return(lineups_long)
+    return(lineups_long[order(lineup_rank, lineup_entry_id)])
 
   } else {
 
@@ -244,7 +246,7 @@ get_tidy_lineups <- function(contest_path, salary_path, sport, contest_id = NULL
 
     setcolorder(lineup_long_sub, colorder)
 
-    return(lineup_long_sub)
+    return(lineup_long_sub[order(lineup_rank, lineup_entry_id)])
 
   } ## end dupe check if-else
 

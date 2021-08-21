@@ -4,7 +4,7 @@
 \alias{get_tidy_lineups}
 \title{Get Tidy Lineups}
 \usage{
-get_tidy_lineups(contest_path, salary_path, sport, contest_id = NA)
+get_tidy_lineups(contest_path, salary_path, sport, contest_id = NULL)
 }
 \arguments{
 \item{contest_path}{a path to the contest-standings csv you'd like to tidy up}
@@ -29,11 +29,9 @@ Takes paths for draftkings contest-standings file, and corresponding salary file
 }
 \examples{
 \donttest{
-
 lineups <- get_tidy_lineups('./contest-standings-1234564789.csv',
                             './DKsalaries.csv', "NFL")
 head(lineups)
-
 }
 
 }
