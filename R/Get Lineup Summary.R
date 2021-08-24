@@ -1,4 +1,38 @@
-get_lineup_summary <- function(tidy_lu, analysis_type = "live", stack_summary = F){
+#' Get Lineup Summary
+#'
+#' @description Takes tidy long data from get_tidy_lineups() function and creates lineup
+#'   summary of total salary and ownership and other statisitics.  
+#'   
+#'   For contests that are on-going, the function will calculate the remaining salary for LOCKED players.
+#'   
+#' @param tidy_lu a data.frame of tidy lineup data obtained from the get_tidy_lineups() function
+#' @param analysis_type "live" for contests that have games which have not started. "post" for contests that have finished.
+#' @param stack_summary Boolean value to indicate if a stack summary should be included in data 
+#'           (NOTE: Currently only NFL is supported, and this will not work for "live" analysis)
+#' @param sport a character string with one of the sports supported by this package
+#'(NFL, NBA, MLB, NHL)
+#'
+#'
+#' @return tidy data.table with a row for each player in a lineup in a contest,
+#'  joined with ownership and points scored data for each player
+#'
+#' @examples
+#' \donttest{
+#' 
+#' lineups <- get_tidy_lineups('./contest-standings-1234564789.csv',
+#'                             './DKsalaries.csv', "NFL")
+#'                             
+#' lu_summary <- get_lineup_summary(tidy_lu, analysis_type = 'post', stack_summary = T, sport = "NFL")                             
+#'
+#' head(lu_summary)
+#' 
+#' }
+#'
+#' @export
+
+
+get_lineup_summary <- function(tidy_lu, analysis_type = "live", stack_summary = F,
+                               sport = NULL){
 
   ## create data.table version of data
   if(!is.data.table(tidy_lu)){
@@ -10,11 +44,16 @@ get_lineup_summary <- function(tidy_lu, analysis_type = "live", stack_summary = 
     lineups = copy(tidy_lu)
 
   }
-
-  ## store contest ID, add to dataframes later
-
+  
+  ## check if stack summary is set and sport is not NFL - save the processing time
+  if(stack_summary == T & sport != 'NFL'){
+    
+    stop('Stack Summary is only supported for NFL')
+    
+  }
+  
+  ## store contest ID, add to dataframes late
   contest_id <- unique(tidy_lu$contest_id)
-
 
   ## split df into two sides, lineup (single row, and player)
   lu_keep <- c("lineup_entry_id", "lineup_username", "lineup_string", "lineup_rank",
@@ -84,7 +123,6 @@ get_lineup_summary <- function(tidy_lu, analysis_type = "live", stack_summary = 
       by = lineup_entry_id]
     )
 
-
     ### join player and lu stat
     setkey(ply_sum, lineup_entry_id)
     setkey(lu_sub, lineup_entry_id)
@@ -152,10 +190,9 @@ get_lineup_summary <- function(tidy_lu, analysis_type = "live", stack_summary = 
     ## drop pmr column for post analysis
     post_drop <- c("lu_pmr_pctl", "lineup_pmr")
 
+    if (stack_summary == T & sport == 'NFL') {
 
-    if(stack_summary == T){
-
-      stacks <- get_lineup_stacks_nhl(tidy_lu)
+      stacks <- get_lineup_stacks_nfl(tidy_lu)
 
       ## join and return
       setkey(stacks, lineup_entry_id)
@@ -172,8 +209,6 @@ get_lineup_summary <- function(tidy_lu, analysis_type = "live", stack_summary = 
 
       return(sum_full[, -..post_drop])
     }
-
-
 
   } else if (analysis_type =="full") {
 
@@ -194,7 +229,6 @@ get_lineup_summary <- function(tidy_lu, analysis_type = "live", stack_summary = 
     keep_lock <- c("lineup_entry_id", "player_pos_remaining")
 
     locked_wide <- locked_wide[, ..keep_lock]
-
 
     ## calc play sum
     ply_sum <-  player_sub[, .(salary_spent = sum(player_salary, na.rm = T),
@@ -227,11 +261,7 @@ get_lineup_summary <- function(tidy_lu, analysis_type = "live", stack_summary = 
     return(sum_full)
 
   } else {
-
     warning("analysis type not reconized")
   }
-
-
-
 
 }

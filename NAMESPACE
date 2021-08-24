@@ -3,5 +3,6 @@
 export(clean_lineup_data)
 export(clean_player_contest_info)
 export(clean_salary)
+export(get_lineup_summary)
 export(get_tidy_lineups)
 import(data.table)
