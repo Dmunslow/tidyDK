@@ -34,13 +34,13 @@ Takes tidy long data from get_tidy_lineups() function and creates lineup
 }
 \examples{
 \donttest{
+
 lineups <- get_tidy_lineups('./contest-standings-1234564789.csv',
                             './DKsalaries.csv', "NFL")
                             
-lu_summary <- get_lineup_summary(tidy_lu, analysis_type = 'post', stack_summary = T)                             
+lu_summary <- get_lineup_summary(tidy_lu, analysis_type = 'post', stack_summary = T, sport = "NFL")                             
 
 head(lu_summary)
-
 
 }
 
