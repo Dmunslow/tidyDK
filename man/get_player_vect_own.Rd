@@ -13,7 +13,7 @@ get_player_vect_own(lu_dat, lineup_players, set_type = "intersection")
 
 \item{set_type}{Which type of subset the function will return.  'intersection' 
 is default and will return lineups that contain all the players in the linuep_players vector.
-Union will return lineups which contain at least 1 of the players in the lineup_players vector.}
+Alternatively, 'union' will return lineups which contain at least 1 of the players in the lineup_players vector.}
 }
 \value{
 a subset of lu_data containing players in the lineup_players vector.

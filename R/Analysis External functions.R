@@ -10,7 +10,7 @@
 #' @param lineup_players vector of player names as they appear in DKSalary file
 #' @param set_type Which type of subset the function will return.  'intersection' 
 #' is default and will return lineups that contain all the players in the linuep_players vector.
-#' Union will return lineups which contain at least 1 of the players in the lineup_players vector.
+#' Alternatively, 'union' will return lineups which contain at least 1 of the players in the lineup_players vector.
 #'
 #' @return a subset of lu_data containing players in the lineup_players vector.
 #'
@@ -37,7 +37,7 @@ get_player_lineups <- function(lu_dat, lineup_players, set_type = 'intersection'
     grep_string <- create_grep_str_intersect(lineup_players)
   } else if (set_type == 'union'){
     
-    grep_string <- create_grep_str_union(lineup_layers)
+    grep_string <- create_grep_str_union(lineup_players)
   } else {
     
     stop("Set Type not recognized, choose intersection for lineups that contain all players in a vector 
@@ -63,7 +63,7 @@ get_player_lineups <- function(lu_dat, lineup_players, set_type = 'intersection'
 #' @param lineup_players vector of player names as they appear in DKSalary file
 #' @param set_type Which type of subset the function will return.  'intersection' 
 #' is default and will return lineups that contain all the players in the linuep_players vector.
-#' Union will return lineups which contain at least 1 of the players in the lineup_players vector.
+#' Alternatively, 'union' will return lineups which contain at least 1 of the players in the lineup_players vector.
 #'
 #' @return a subset of lu_data containing players in the lineup_players vector.
 #'
@@ -85,7 +85,7 @@ get_player_vect_own <- function(lu_dat, lineup_players, set_type = 'intersection
     grep_string <- create_grep_str_intersect(lineup_players)
   } else if (set_type == 'union'){
     
-    grep_string <- create_grep_str_union(lineup_layers)
+    grep_string <- create_grep_str_union(lineup_players)
   } else {
     
     stop("Set Type not recognized, choose intersection for lineups that contain all players in a vector 
