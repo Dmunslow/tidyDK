@@ -52,7 +52,7 @@ get_tidy_lineups <- function(contest_path, salary_path, sport, contest_id = NULL
   sal_own <- combine_salary_own(salary_clean, ci_clean)
 
   ## drop players that are not owned in contest -- helps with dupes
-  sal_own <- sal_own[!is.na(player_own_pct)]
+  sal_own <- sal_own[!is.na(player_own_pct) & player_name != 'LOCKED']
 
   ## get contest_id if not supplied and its part of file name
   if(is.null(contest_id)){
@@ -71,7 +71,7 @@ get_tidy_lineups <- function(contest_path, salary_path, sport, contest_id = NULL
     ## no dupes, join em up ez pz
     setkey(lineups_long, player_name)
     setkey(sal_own, player_name)
-    lineups_long <- lineups_long[sal_own]
+    lineups_long <- merge.data.table(lineups_long, sal_own, all.x = T)
 
     ## add columns to lineups ====================================================
 
@@ -121,7 +121,7 @@ get_tidy_lineups <- function(contest_path, salary_path, sport, contest_id = NULL
     setkey(salary_sub, player_name)
     setkey(lineup_long_sub, player_name)
 
-    lineup_long_sub <- salary_sub[lineup_long_sub]
+    lineup_long_sub <- merge.data.table(lineup_long_sub, sal_sub, all.x = T)
 
     ## set col order for rbinds later
     lucorder <- names(lineup_long_sub)
