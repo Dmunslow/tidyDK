@@ -58,8 +58,7 @@ combine_salary_own <- function(sal_clean, own_clean){
         setkey(dupe_summary, player_name)
         setkey(own_summary, player_name)
         
-        
-        
+    
         decision_table <- merge.data.table(dupe_summary, own_summary, all.x = T)
 
         ## part 2: duped, notso easy =================================================
@@ -129,7 +128,7 @@ combine_salary_own <- function(sal_clean, own_clean){
 
           warning('There were duplicate player names in salary file which were unable to be matched to ownership and scoring data.\nPlayer position will be FLEX for those players and salary, ownership and scoring data will be all NA.
             \nPlayers with NA info: \n', print_and_capture(na_df), 
-            "\n\nIf one you suspect that one of the players above is unowned,\nyou can drop the player from the salary data and re-run the cleanup function\nas demonstrated in the\ntidyDK vignette ADDLINK")
+            "\n\nIf one you suspect that one of the players above is unowned,\nyou can drop the player from the salary data and re-run the cleanup function as demonstrated in the\ntidyDK vignette ADDLINK")
 
         }
         
