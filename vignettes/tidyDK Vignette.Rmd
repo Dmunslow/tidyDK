@@ -1,0 +1,52 @@
+---
+title: "tidyDK Vingette"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+`tidyDK` is a set of functions to efficiently ingest and clean draftkings contest and salary files into both wide and long tidy formats. tidyDK enables users to:
+
+* Combines user lineup information with player ownership data in 'contest-details' file
+* Converts data to long format (1 row per player, per lineup)
+* Provides stand-alone analysis functions that can be used on unmodified draftkings 'contest-details' files
+* Analyze live contests to determine late-swap strategy
+
+
+The package contains NFL play-by-play data back to 1999
+As suggested by the package name, it obtains games much faster
+Includes completion probability (cp), completion percentage over expected (cpoe), and expected yards after the catch (xyac_epa and xyac_mean_yardage) in play-by-play going back to 2006
+Includes drive information, including drive starting position and drive result
+Includes series information, including series number and series success
+Hosts a repository of play-by-play data going back to 1999 for very quick access
+Features models for Expected Points, Win Probability, Completion Probability, and Yards After the Catch (see section below)
+Includes a function update_db() that creates and updates a database
+
+```{r, eval = F}
+## Install tidyDK from github
+devtools::install_github("Dmunslow/tidyDK")
+
+```
+
+```{r}
+library(tidyDK)
+```
+
+Now, download ze sample file (lets get a function that lists the files in the repo)
+
+```{r}
+
+# save path
+con <- "https://github.com/Dmunslow/tidyDK/raw/main/data/contests/NFL2020_w02_nickel_mxe3_91999281.csv"
+sal <- "https://github.com/Dmunslow/tidyDK/raw/main/data/salaries/DKSalaries_NFL2020_Week_02_ms.csv"
+
+lus_long <- get_tidy_lineups(contest_path = con, salary_path = sal, "NFL")
+
+```
+
+This error message sucks: Player position will be FLEX for those players, and salary data will be NA. Include which player(s) causing issue so one can be excluded from salary if needed.
+
