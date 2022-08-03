@@ -57,7 +57,9 @@ combine_salary_own <- function(sal_clean, own_clean){
 
         setkey(dupe_summary, player_name)
         setkey(own_summary, player_name)
-
+        
+        
+        
         decision_table <- merge.data.table(dupe_summary, own_summary, all.x = T)
 
         ## part 2: duped, notso easy =================================================
@@ -110,16 +112,29 @@ combine_salary_own <- function(sal_clean, own_clean){
         setcolorder(sal_own_2, names(sal_own_1))
         sal_own_full <- rbind(sal_own_1, sal_own_2)
 
-        ## drop own_player_position
-        drop <- 'own_position'
+        ## get data frame for error message
+        keep <- c('player_name', 'player_position', 'player_salary', 'player_team')
+        
+        na_players <- unique(sal_own_full[player_position == "FLEX"])
+        
+        na_df <- sal_own_full[player_position != "FLEX" & player_name %in% na_players, ..keep]
+        
+        ## thank you SO https://stackoverflow.com/questions/26083625/how-do-you-include-data-frame-output-inside-warnings-and-errors
+        print_and_capture <- function(x)
+        {
+          paste(capture.output(print(x)), collapse = "\n")
+        }
 
         if(nrow(sal_own_full[player_position == "FLEX"]) > 0){
 
-          warning('Duplicate Player Names in dataset were unable to be matched.
-            \nPlayer position will be FLEX for those players, and salary data will be NA.')
+          warning('There were duplicate player names in salary file which were unable to be matched to ownership and scoring data.\nPlayer position will be FLEX for those players and salary, ownership and scoring data will be all NA.
+            \nPlayers with NA info: \n', print_and_capture(na_df), 
+            "\n\nIf one you suspect that one of the players above is unowned,\nyou can drop the player from the salary data and re-run the cleanup function\nas demonstrated in the\ntidyDK vignette ADDLINK")
 
         }
-
+        
+        ## drop own_player_position
+        drop <- 'own_position'
         return(sal_own_full[,-..drop])
 
   }

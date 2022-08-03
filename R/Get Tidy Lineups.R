@@ -32,16 +32,12 @@ get_tidy_lineups <- function(contest_path, salary_path, sport, contest_id = NULL
                    encoding = "UTF-8", integer64 = "character") ## char for int64 to avoid dependency
   contest_info <- fread(contest_path, select = c(8:11),fill = T, sep = ',',
                         encoding = "UTF-8", integer64 = "character") ## encoding for accents and garbo
-  contest_info <- contest_info[!is.na(contest_info$FPTS),]
+  contest_info <- contest_info[!is.na(contest_info$FPTS)]
   salary <- fread(salary_path)
 
   ## convert utf-8 to acii to sub non accented chars
   lineups[,Lineup := iconv(Lineup, from = "UTF8", to = 'ASCII//TRANSLIT')]
   contest_info[,Player := iconv(Player, from = "UTF8", to = 'ASCII//TRANSLIT')]
-
-  setDT(lineups)
-  setDT(contest_info)
-  setDT(salary)
 
   ## clean data with cleaning functions
   lineups_long <- clean_lineup_data(lineups,  sport)
